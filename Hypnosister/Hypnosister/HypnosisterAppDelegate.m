@@ -1,41 +1,65 @@
 //
-//  AppDelegate.m
-//  hypno
+//  HypnosisterAppDelegate.m
+//  Hypnosister
 //
-//  Created by Jonathan Arp on 7/22/13.
-//  Copyright (c) 2013 ND. All rights reserved.
+//  Created by Joe Conway on 10/25/12.
+//  Copyright (c) 2012 Big Nerd Ranch. All rights reserved.
 //
 
-#import "AppDelegate.h"
-#import "HypnoView.h"
+#import "HypnosisterAppDelegate.h"
+#import "HypnosisView.h"
 
-@implementation AppDelegate
+@interface HypnosisterAppDelegate ()
+{
+    HypnosisView *_view;
+}
+@end
+
+@implementation HypnosisterAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                            withAnimation:UIStatusBarAnimationFade];
+    CGRect screenRect = [[self window] bounds];
+    // Create the UIScrollView to have the size of the window, matching its size
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:screenRect];
+
+    [scrollView setMinimumZoomScale:1.0];
+    [scrollView setMaximumZoomScale:5.0];
+    [scrollView setDelegate:self];
+
+    [[self window] addSubview:scrollView];
+    // Create the HypnosisView with a frame that is twice the size of the screen
+    CGRect bigRect = screenRect;
+    
+    _view = [[HypnosisView alloc] initWithFrame:screenRect];
+    
+    // Add the HypnosisView as a subview of the scrollView instead of the window
+    [scrollView addSubview:_view];
+        
+    // Tell the scrollView how big its virtual world is
+    [scrollView setContentSize:bigRect.size];
+    
+    
+    BOOL success = [_view becomeFirstResponder];
+    if (success) {
+        NSLog(@"HypnosisView became the first responder");
+    } else {
+        NSLog(@"Could not become first responder");
+    }
+
     self.window.backgroundColor = [UIColor whiteColor];
-  
-    
-    CGRect viewFrame = CGRectMake(160, 240, 100, 150);
-    HypnoView *view = [[HypnoView alloc] initWithFrame:viewFrame];
-    [view setBackgroundColor:[UIColor redColor]];
-    [[self window] addSubview:view];
-    
-    CGRect moreViewFrame = CGRectMake(42, 42, 42, 42);
-    HypnoView *moreView = [[HypnoView alloc] initWithFrame:moreViewFrame];
-    [moreView setBackgroundColor:[UIColor blueColor]];
-    [view addSubview:moreView];
-    
-    
     [self.window makeKeyAndVisible];
     return YES;
 }
 
-
-
-
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return _view;
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
