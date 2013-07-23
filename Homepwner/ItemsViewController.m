@@ -18,6 +18,10 @@
     return [[[BNRItemStore sharedStore] allItems] count];
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 2;
+}
+
 -(NSInteger)tableView:(UITableView *) tv numberOfSections:(NSInteger)section{
     NSLog(@"no of sections got called");
     return 2;
@@ -35,7 +39,7 @@
     
     NSArray *items = [[BNRItemStore sharedStore] allItems];
     BNRItem *item = [items objectAtIndex:[indexPath row]];
-    [[cell textLabel] setText: [item description]];
+    [[cell textLabel] setText: [item itemName]];
     return cell;
 }
 
@@ -44,7 +48,7 @@
     self = [super initWithStyle:UITableViewStyleGrouped];
     
     if(self){
-        for ( int i = 0; i<50; i++){
+        for ( int i = 0; i<5; i++){
             [[BNRItemStore sharedStore] createItem];
         }
     }
