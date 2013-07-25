@@ -7,12 +7,12 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "TouchTracker/BNRDrawView.m"
-         timestampString = "396457566.009681"
+         filePath = "HypnoTime/HypnosisView.m"
+         timestampString = "396465354.418732"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "25"
-         endingLineNumber = "25"
+         startingLineNumber = "54"
+         endingLineNumber = "54"
          landmarkName = "-initWithFrame:"
          landmarkType = "5">
       </FileBreakpoint>

@@ -15,8 +15,10 @@
     NSMutableArray *_finishedLines;
 }
 
-@end
+@property (nonatomic, weak) BNRLine *selectedLine;
+-(BNRLine *) lineAtPoint:(CGPoint)p;
 
+@end
 @implementation BNRDrawView
 
 -(id)initWithFrame:(CGRect) r {
@@ -27,11 +29,98 @@
         _finishedLines = [[NSMutableArray alloc] init];
         [self setBackgroundColor:[UIColor grayColor]];
         [self setMultipleTouchEnabled:YES];
+        
+        //double tap
+        UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc ] initWithTarget:self action:@selector(doubleTap:)];
+        [doubleTapRecognizer setNumberOfTapsRequired:2];
+        [doubleTapRecognizer setDelaysTouchesBegan:YES];
+        [self addGestureRecognizer:doubleTapRecognizer];
+        
+        //single tap
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        [tapRecognizer setNumberOfTapsRequired:1];
+        [tapRecognizer setDelaysTouchesBegan:YES];
+        [tapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
+        [self addGestureRecognizer:tapRecognizer];
+        
+        
+        //long press
+        UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+        [self addGestureRecognizer:longPressGesture];
     }
     
     return self;
 }
 
+-(void) tap:(UIGestureRecognizer *)gr{
+    NSLog(@"Tap :-(");
+    CGPoint point = [gr locationInView:self];
+    [self setSelectedLine:[self lineAtPoint:point]];
+    
+    if([self selectedLine]){
+        [self becomeFirstResponder];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:@"Delete" action:@selector(deleteLine:)];
+        [menu setMenuItems:@[deleteItem]];
+        [menu setTargetRect:CGRectMake(point.x, point.y, 2, 2) inView:self];
+        [menu setMenuVisible:YES animated:YES];
+
+    }
+    
+    else{
+        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+        
+    }
+    
+            [self setNeedsDisplay];
+}
+
+
+-(void) doubleTap:(UIGestureRecognizer *)gr{
+    NSLog(@"Double Tap!!!!");
+    [_linesInProgress removeAllObjects];
+    [_finishedLines removeAllObjects];
+    [self setNeedsDisplay];
+}
+
+-(void) longPress:(UIGestureRecognizer *)gr{
+    NSLog(@"Loooooooooong preeeeess");
+    
+    if([gr state] == UIGestureRecognizerStateBegan ){
+        CGPoint point = [gr locationInView:self];
+        [self setSelectedLine: [self lineAtPoint:point  ]];
+        
+        if( [self selectedLine]){
+            [_linesInProgress removeAllObjects];
+        }
+        
+        else if([gr state] == UIGestureRecognizerStateEnded){
+            [self setSelectedLine:nil];
+        }
+        [self setNeedsDisplay];
+    }
+}
+
+
+-(BNRLine * )lineAtPoint:(CGPoint)p{
+    for(BNRLine *l in _finishedLines ){
+        CGPoint start = [l begin];
+        CGPoint end = [l end];
+        
+        for (float t = 0.0; t <= 1.0; t +=.05){
+            
+            float x = start.x + t * (end.x - start.x);
+            float y = start.y + + t * (end.y - start.y);
+            
+            if(hypot(x - p.x, y - p.y) < 20.0){
+                NSLog(@"line found!");
+                return l;
+            }
+        }
+    }
+               NSLog(@"line NOT found!");
+    return nil;
+}
 
 -(void)drawRect:(CGRect)rect{
     void (^strokeLine)(BNRLine *) = ^(BNRLine *line){
@@ -52,6 +141,11 @@
     
     for( NSValue *key in _linesInProgress){
         strokeLine([_linesInProgress objectForKey:key]);
+    }
+    
+    if([self selectedLine]){
+        [[UIColor greenColor] set];
+        strokeLine([self selectedLine]);
     }
    
 }
@@ -109,10 +203,20 @@
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
      for(UITouch *t in touches){
-         NSValue *key = [NSValue valueWithNonretainedObject:key];
+         NSValue *key = [NSValue valueWithNonretainedObject:t];
          [_linesInProgress removeObjectForKey:key];
      }
     
+    [self setNeedsDisplay];
+}
+
+-(BOOL)canBecomeFirstResponder{
+    return YES;
+}
+
+
+-(void) deleteLine:(id)sender{
+    [_finishedLines removeObject:[self selectedLine]];
     [self setNeedsDisplay];
 }
 @end
