@@ -32,6 +32,7 @@
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     [_boxLayer setPosition:_originalPoint];
     
+    
 }
 
 - (id)initWithFrame:(CGRect)frame

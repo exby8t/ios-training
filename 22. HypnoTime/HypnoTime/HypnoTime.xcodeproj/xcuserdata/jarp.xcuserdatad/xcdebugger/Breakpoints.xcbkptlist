@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "HypnoTime/HypnosisView.m"
-         timestampString = "396465354.418732"
+         timestampString = "396468085.115261"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "54"
-         endingLineNumber = "54"
+         startingLineNumber = "55"
+         endingLineNumber = "55"
          landmarkName = "-initWithFrame:"
          landmarkType = "5">
       </FileBreakpoint>
