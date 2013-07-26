@@ -10,11 +10,10 @@
 #import "BNRRSSFeed.h"
 #import "BNRRSSItem.h"
 #import "BNRWebViewController.h"
+#import "BNRFeedStore.h"
 
-@interface BNRListViewController () <NSURLConnectionDataDelegate>
+@interface BNRListViewController ()
 
-@property (nonatomic, strong) NSURLConnection *connection;
-@property (nonatomic, strong) NSMutableData *jsonData;
 @property (nonatomic, strong) BNRRSSFeed *feed;
 
 - (void)fetchFeed;
@@ -22,7 +21,6 @@
 @end
 
 @implementation BNRListViewController
-
 
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -36,50 +34,23 @@
 
 - (void)fetchFeed
 {
-    [self setJsonData:[[NSMutableData alloc] init]];
-        
-    NSString *requestString = [NSString stringWithFormat:@"http://itunes.apple.com/us/rss/topsongs/limit=21/genre=4/json"];
-    NSURL *url = [NSURL URLWithString:requestString];
-    
-    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:url];
-    
-    NSURLConnection *c = [[NSURLConnection alloc] initWithRequest:req delegate:self startImmediately:YES];
-    
-    [self setConnection:c];
+
+    [[BNRFeedStore sharedStore] fetchRSSFeedWithCompletion:^(BNRRSSFeed *obj, NSError *err) {
+         if(!err){
+             [self setFeed:obj];
+         }
+         
+         else{
+             UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"Whatevs" otherButtonTitles:nil, nil];
+             
+                [av show];
+             
+            }
+     }];
+
+ 
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    [[self jsonData] appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    [self setConnection:nil];
-    [self setJsonData:nil];
-    
-    NSString *errString = [error localizedDescription];
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                 message:errString delegate:nil
-                                       cancelButtonTitle:@"OK"
-                                       otherButtonTitles:nil];
-    [av show];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:[self jsonData]
-                                                               options:0
-                                                                 error:nil];
-    
-    BNRRSSFeed *c = [[BNRRSSFeed alloc] init];
-    [c readFromJSONObject:jsonObject];
-    [self setFeed:c];
-    
-        NSLog(@"%@", [[self feed] title]);
-    
-    [[self tableView] reloadData];
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -113,4 +84,41 @@
     
     return c;
 }
+
+/*
+ 
+ - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+ {
+ [[self jsonData] appendData:data];
+ }
+ 
+ - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+ {
+ [self setConnection:nil];
+ [self setJsonData:nil];
+ 
+ NSString *errString = [error localizedDescription];
+ UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error"
+ message:errString delegate:nil
+ cancelButtonTitle:@"OK"
+ otherButtonTitles:nil];
+ [av show];
+ }
+ 
+ - (void)connectionDidFinishLoading:(NSURLConnection *)connection
+ {
+ NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:[self jsonData]
+ options:0
+ error:nil];
+ 
+ BNRRSSFeed *c = [[BNRRSSFeed alloc] init];
+ [c readFromJSONObject:jsonObject];
+ [self setFeed:c];
+ 
+ NSLog(@"%@", [[self feed] title]);
+ 
+ [[self tableView] reloadData];
+ }
+ */
+
 @end

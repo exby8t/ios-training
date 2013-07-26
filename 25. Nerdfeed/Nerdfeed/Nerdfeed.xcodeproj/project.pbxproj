@@ -20,6 +20,8 @@
 		BE45945B16DBEEAF00179BB8 /* BNRRSSFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = BE45945A16DBEEAF00179BB8 /* BNRRSSFeed.m */; };
 		BE45945E16DBEEB600179BB8 /* BNRRSSItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BE45945D16DBEEB600179BB8 /* BNRRSSItem.m */; };
 		BE45946216DBF34500179BB8 /* BNRWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE45946116DBF34500179BB8 /* BNRWebViewController.m */; };
+		CAB47DDD17A2BF24002890AE /* BNRFeedStore.m in Sources */ = {isa = PBXBuildFile; fileRef = CAB47DDC17A2BF24002890AE /* BNRFeedStore.m */; };
+		CAB47DE017A2C429002890AE /* BNRConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = CAB47DDF17A2C429002890AE /* BNRConnection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,10 @@
 		BE45945F16DBEF6700179BB8 /* BNRJSONObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BNRJSONObject.h; sourceTree = "<group>"; };
 		BE45946016DBF34500179BB8 /* BNRWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRWebViewController.h; sourceTree = "<group>"; };
 		BE45946116DBF34500179BB8 /* BNRWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRWebViewController.m; sourceTree = "<group>"; };
+		CAB47DDB17A2BF24002890AE /* BNRFeedStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRFeedStore.h; sourceTree = "<group>"; };
+		CAB47DDC17A2BF24002890AE /* BNRFeedStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRFeedStore.m; sourceTree = "<group>"; };
+		CAB47DDE17A2C428002890AE /* BNRConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BNRConnection.h; sourceTree = "<group>"; };
+		CAB47DDF17A2C429002890AE /* BNRConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BNRConnection.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +101,10 @@
 				BE45944916DBECC600179BB8 /* BNRAppDelegate.m */,
 				BE45945616DBED2300179BB8 /* BNRListViewController.h */,
 				BE45945716DBED2300179BB8 /* BNRListViewController.m */,
+				CAB47DDB17A2BF24002890AE /* BNRFeedStore.h */,
+				CAB47DDC17A2BF24002890AE /* BNRFeedStore.m */,
+				CAB47DDE17A2C428002890AE /* BNRConnection.h */,
+				CAB47DDF17A2C429002890AE /* BNRConnection.m */,
 				BE45944016DBECC600179BB8 /* Supporting Files */,
 				BE45945916DBEEAF00179BB8 /* BNRRSSFeed.h */,
 				BE45945A16DBEEAF00179BB8 /* BNRRSSFeed.m */,
@@ -193,6 +203,8 @@
 				BE45945B16DBEEAF00179BB8 /* BNRRSSFeed.m in Sources */,
 				BE45945E16DBEEB600179BB8 /* BNRRSSItem.m in Sources */,
 				BE45946216DBF34500179BB8 /* BNRWebViewController.m in Sources */,
+				CAB47DDD17A2BF24002890AE /* BNRFeedStore.m in Sources */,
+				CAB47DE017A2C429002890AE /* BNRConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,6 +323,7 @@
 				BE45945516DBECC600179BB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
